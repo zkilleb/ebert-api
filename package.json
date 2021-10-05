@@ -1,6 +1,6 @@
 {
   "name": "ebert-api",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "API for rogerebert.com reviews",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
