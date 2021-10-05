@@ -45,10 +45,7 @@ function stripReviewInformation(response: any, config: any): IReview {
   };
 }
 
-function stripGreatMovieInformation(
-  response: any,
-  config: any,
-): IGreatMovie {
+function stripGreatMovieInformation(response: any, config: any): IGreatMovie {
   const cast: string[] = [];
   const crew: string[] = [];
   const $ = cheerio.load(response);
@@ -77,62 +74,62 @@ function stripGreatMovieInformation(
 }
 
 export async function fetchGreatMovie(name: string, year: string | number) {
-    try {
-      if (
-        year &&
-        year.toString().length === 4 &&
-        name &&
-        typeof name === 'string'
-      ) {
-        const formattedUrl = `/reviews/great-movie-${name
-          .toLowerCase()
-          .replace(/ /g, '-')
-          .replace(FORMATTING_REGEX, '')}-${year.toString()}`;
-        const response = await api.get(`${formattedUrl}`);
-        if (response.status === 200)
-          return stripGreatMovieInformation(response.data, response.config);
-      } else return { error: INPUT_ERRROR_MESSAGE };
-    } catch (e: any) {
-      if (e.response && e.response.status === 404)
-        return { error: NOT_FOUND_ERROR_MESSAGE };
-      else return { error: e.message };
-    }
+  try {
+    if (
+      year &&
+      year.toString().length === 4 &&
+      name &&
+      typeof name === 'string'
+    ) {
+      const formattedUrl = `/reviews/great-movie-${name
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(FORMATTING_REGEX, '')}-${year.toString()}`;
+      const response = await api.get(`${formattedUrl}`);
+      if (response.status === 200)
+        return stripGreatMovieInformation(response.data, response.config);
+    } else return { error: INPUT_ERRROR_MESSAGE };
+  } catch (e: any) {
+    if (e.response && e.response.status === 404)
+      return { error: NOT_FOUND_ERROR_MESSAGE };
+    else return { error: e.message };
   }
-  
+}
+
 export async function fetchReview(name: string, year: string | number) {
-    try {
-      if (
-        year &&
-        year.toString().length === 4 &&
-        name &&
-        typeof name === 'string'
-      ) {
+  try {
+    if (
+      year &&
+      year.toString().length === 4 &&
+      name &&
+      typeof name === 'string'
+    ) {
+      const formattedUrl = `/reviews/${name
+        .toLowerCase()
+        .replace(/ /g, '-')
+        .replace(FORMATTING_REGEX, '')}-${year.toString()}`;
+      const response = await api.get(formattedUrl);
+      if (response.status === 200) {
+        return stripReviewInformation(response.data, response.config);
+      } else return { error: INPUT_ERRROR_MESSAGE };
+    }
+  } catch (e: any) {
+    if (e.response && e.response.status === 404) {
+      try {
         const formattedUrl = `/reviews/${name
           .toLowerCase()
           .replace(/ /g, '-')
-          .replace(FORMATTING_REGEX, '')}-${year.toString()}`;
-        const response = await api.get(formattedUrl);
-        if (response.status === 200) {
+          .replace(FORMATTING_REGEX, '')}-movie-review-${year.toString()}`;
+        const response = await api.get(`${formattedUrl}`);
+        if (response.status === 200)
           return stripReviewInformation(response.data, response.config);
-        } else return { error: INPUT_ERRROR_MESSAGE };
+      } catch (retryError: any) {
+        if (retryError.response && retryError.response.status === 404)
+          return { error: NOT_FOUND_ERROR_MESSAGE };
       }
-    } catch (e: any) {
-      if (e.response && e.response.status === 404) {
-        try {
-          const formattedUrl = `/reviews/${name
-            .toLowerCase()
-            .replace(/ /g, '-')
-            .replace(FORMATTING_REGEX, '')}-movie-review-${year.toString()}`;
-          const response = await api.get(`${formattedUrl}`);
-          if (response.status === 200)
-            return stripReviewInformation(response.data, response.config);
-        } catch (retryError: any) {
-          if (retryError.response && retryError.response.status === 404)
-            return { error: NOT_FOUND_ERROR_MESSAGE };
-        }
-      } else return { error: e.message };
-    }
+    } else return { error: e.message };
   }
+}
 
 interface IReview extends IGreatMovie {
   starRating: number;
