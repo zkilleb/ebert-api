@@ -1,9 +1,10 @@
 {
   "name": "ebert-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "API for rogerebert.com reviews",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": "https://github.com/zkilleb/ebert-api",
   "scripts": {
     "build": "tsc",
     "prettier": "prettier --write ./src/**/*.{js,ts}",
