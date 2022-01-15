@@ -1,11 +1,11 @@
-# ebert-api
+# eberts-api
 
 A promise based node library for getting Roger Ebert review data.
 
 ## Usage
 
 ```javascript
-import { fetchReview, fetchGreatMovie} from 'ebert-api';
+import { fetchReview, fetchGreatMovie } from 'eberts-api';
 await fetchReview('Blue Velvet', 1986);
 await fetchGreatMovie('Paths of Glory', '1957');
 ```
